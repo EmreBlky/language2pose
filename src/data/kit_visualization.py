@@ -165,7 +165,7 @@ if __name__ == '__main__':
 
   args = parser.parse_args()
 
-  path = Path('../dataset/kit-mocap/03112_mmm.xml')
+  path = Path('/scr-ssd/ying1123/dataset/kit-mocap/03112_mmm.xml')
   xyz_data, skel, _, _, _ = mmm2quat(path)
   render(xyz_data,
          skel,

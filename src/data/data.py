@@ -277,6 +277,8 @@ class KITMocap(RawData):
     data = []
     for tup in os.walk(path2data):
       for filename in tup[2]:
+#        if filename[:5] > '00200':
+#            continue
         if Path(filename).suffix == '.xml':
           annotpath = Path(tup[0])/(filename.split('_')[0] + '_annotations.json')
           annot = json.load(open(annotpath, 'r'))

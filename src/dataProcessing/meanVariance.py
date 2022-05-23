@@ -7,7 +7,7 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dataUtils import *
 
 from pycasper.name import Name
-from pycasper.BookKeeper import *
+#from pycasper.BookKeeper import *
 from argsUtils import argparseNloop
 
 import numpy as np
@@ -24,7 +24,10 @@ def loadMeanVariance(columns_subset, seed, mask, feats_kind, dataset, f_new):
   return mean, variance
 
 def loop(args, exp_num):
-  BookKeeper._set_seed(args)
+#  args_subset = ['exp', 'cpk', 'model', 'time', 'chunks']
+#  book = BookKeeper.__init__(args, args_subset)
+#  BookKeeper._set_seed()
+#  BookKeeper._set_seed(args)
   path2data = args.path2data
   dataset = args.dataset
   lmksSubset = args.lmksSubset

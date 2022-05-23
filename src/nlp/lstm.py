@@ -122,7 +122,7 @@ class Word2Vec(nn.Module):
     print('Loaded Word2Vec model')
     
     # Load pre-trained model tokenizer (vocabulary)
-    self.tokenizer = BaseTokenizer(self.model.vocab)
+    self.tokenizer = BaseTokenizer(self.model.key_to_index)
     
     # Tokenized input
     text = "Who was Jim Henson ? Jim Henson was a puppeteer"

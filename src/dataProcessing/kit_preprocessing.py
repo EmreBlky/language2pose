@@ -4,4 +4,4 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from data.data import KITMocap
 
-KITMocap('../dataset/kit-mocap', preProcess_flag=True)
+KITMocap('/scr-ssd/ying1123/dataset/kit-mocap', preProcess_flag=True)

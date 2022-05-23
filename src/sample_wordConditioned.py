@@ -51,6 +51,7 @@ def toEuler(M, joints, euler_columns):
 
 def toFKE(M, data, filename):
   ''' Convert RIFKE to FKE '''
+  print(filename.with_suffix('.rifke').as_posix())
   output_columns = data.raw_data.output_columns('rifke')
   M[output_columns].to_csv(filename.with_suffix('.rifke').as_posix()) ## save rifke as well
   M = data.raw_data.rifke2fke(M[output_columns].values)
@@ -70,9 +71,10 @@ def sample(args, exp_num, data=None):
   args = book.args
 
   dir_name = book.name.dir(args.save_dir)
-  
+
   ## Training parameters
   path2data = args.path2data
+  path2data = "/viscam/u/ying1123/dataset/kit-mocap/kit-mocap-lang2pose"
   dataset = args.dataset
   lmksSubset = args.lmksSubset
   desc = args.desc
@@ -92,7 +94,7 @@ def sample(args, exp_num, data=None):
   s2v = args.s2v
   f_new = args.f_new
   curriculum = args.curriculum
-  
+
   ## Load data iterables
   if data is None:
     data = Data(path2data, dataset, lmksSubset, desc,
@@ -146,8 +148,9 @@ def sample(args, exp_num, data=None):
   global columns
   columns = get_columns(feats_kind, data)
   pre = Transforms(args.transforms, columns, args.seed, mask, feats_kind, dataset, f_new)
-  
+ 
   def loop(model, data, dataLoaders, pre, batch_size, desc='train'):
+    print("Begin loop")
     sentences = {}
     running_loss = 0
     running_internal_loss = 0
@@ -156,6 +159,7 @@ def sample(args, exp_num, data=None):
 
     Tqdm = tqdm(dataLoaders, desc=desc+' {:.4f}'.format(0), leave=False, ncols=20)
     for count, loader in enumerate(Tqdm):
+      print("count", count)
       loader = DataLoader(loader, batch_size=1, shuffle=False)
       outputs_list = []
       start_trajectory_list = []
@@ -211,13 +215,14 @@ def sample(args, exp_num, data=None):
         else:
           loss = 0
           loss_ = 0
+
         for i_loss in internal_losses:
           loss += i_loss
           loss_ += i_loss.item()
           running_internal_loss += i_loss.item()
       
         running_loss += loss_
-        running_count +=  np.prod(y.shape)    
+        running_count += np.prod(y.shape)    
         ## update tqdm
         Tqdm.set_description(desc+' {:.4f} {:.4f}'.format(running_loss/running_count, running_internal_loss/running_count))
         Tqdm.refresh()
@@ -228,6 +233,7 @@ def sample(args, exp_num, data=None):
         y_cap = y_cap.detach()
 
       if outputs_list:
+        print("local2global")
         outputs = local2global(outputs_list, start_trajectory_list, input_shape, trajectory_size, data.mask)
         new_size = list(outputs.shape)
         new_size[0] *= loader.dataset.f_ratio
@@ -270,6 +276,7 @@ def sample(args, exp_num, data=None):
                                euler_columns=data.raw_data.columns)
             data.raw_data.mat2amc(mat_full.values, filename.with_suffix('.amc'))
           elif feats_kind == 'rifke':
+            print("toFKE", filename)
             toFKE(mat_full_temp,
                   data,
                   filename.with_suffix('.fke'))

@@ -186,7 +186,7 @@ def train(args, exp_num, data=None):
         loss_ += i_loss.item()
         running_internal_loss += i_loss.item()
 
-      running_count +=  np.prod(y.shape)    
+      running_count += np.prod(y.shape)    
       running_loss += loss_
       ## update tqdm
       Tqdm.set_description(desc+' {:.4f} {:.4f}'.format(running_loss/running_count, running_internal_loss/running_count))

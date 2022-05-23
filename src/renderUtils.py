@@ -72,6 +72,11 @@ def parallelRender(filenames, descriptions, outputs, skel, feats_kind):
   figsizes = [(4,4) for _ in range(len(filenames))]
   feats_kind = [feats_kind] * len(filenames)
 
+  # TODO: to be deleted, debug purpose
+#  filenums = filenums[0:1000]
+#  skels = skels[0:1000]
+#  times
+
   #for input in zip(filenums, filenames, descriptions, skels, times, outputs, figsizes, feats_kind):
     #readNrender(input)
   parallel(readNrender, zip(filenums, filenames, descriptions, skels, times, outputs, figsizes, feats_kind))

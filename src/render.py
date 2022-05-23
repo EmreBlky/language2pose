@@ -43,12 +43,13 @@ def loop(args, exp_num):
   dataset = args.dataset
   feats_kind = args.feats_kind
   if dataset == 'KITMocap':
-    path2data = '../dataset/kit-mocap'
+     path2data = args.path2data
+#    path2data = '../dataset/kit-mocap'
   elif dataset == 'CMUMocap':
     #path2data = '../dataset/cmu-pose/all_asfamc'
     raise NotImplementedError
 
-  data = Data(path2data, dataset, lmksSubset=['all'], desc=None, load_data=False)
+  #data = Data(path2data, dataset, lmksSubset=['all'], desc=None, load_data=False)
 
   ## Load Skeleton
   skel = pkl.load(open('dataProcessing/{}/skeleton.p'.format(args.dataset), 'rb'))
@@ -72,7 +73,8 @@ def loop(args, exp_num):
           if output.with_suffix('.mp4').exists():
             continue
         outputs.append(output.with_suffix('.mp4').as_posix())
-        descriptions.append(get_description(data.df, filename, path2data, feats_kind))
+  #      descriptions.append(get_description(data.df, filename, path2data, feats_kind))
+        descriptions.append(filename)
         os.makedirs(output.parent, exist_ok=True)
         filename = Path(tup[0])/filename
         filenames.append(filename.as_posix())
