@@ -10,6 +10,8 @@ def argparseNloop(loop):
                       help='name of the dataset')
   parser.add_argument('-path2data', nargs='+', type=str, default=['../dataset/cmu-pose/all_asfamc/'],
                       help='path to data')
+  parser.add_argument('-data_subset', nargs='+', type=str, default=[None],
+                      help='only consider a subset of the dataset, listed in file args.data_subset')
   parser.add_argument('-train_frac', nargs='+', type=float, default=[0.6],
                       help='Fraction of data to be used for training')
   parser.add_argument('-dev_frac', nargs='+', type=float, default=[0.2],

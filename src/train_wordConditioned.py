@@ -49,7 +49,8 @@ def train(args, exp_num, data=None):
                                                          'stop_thresh':args.stop_thresh,
                                                          'desc':args.desc,
                                                          'curriculum':args.curriculum,
-                                                         'lr':args.lr},
+                                                         'lr':args.lr,
+                                                         'data_subset':args.data_subset},
                     tensorboard=args.tb,
                     load_pretrained_model=load_pretrained_model)
   ## load_pretrained_model makes sure that the model is loaded, old save files are not updated and _new_exp is called to assign new filename
@@ -62,6 +63,7 @@ def train(args, exp_num, data=None):
   ## Training parameters
   path2data = args.path2data
   dataset = args.dataset
+  data_subset = args.data_subset
   lmksSubset = args.lmksSubset
   desc = args.desc
   split = (args.train_frac, args.dev_frac)
@@ -84,7 +86,7 @@ def train(args, exp_num, data=None):
   
   ## Load data iterables
   if data is None:
-    data = Data(path2data, dataset, lmksSubset, desc,
+    data = Data(path2data, dataset, data_subset, lmksSubset, desc,
                 split, batch_size=batch_size,
                 time=time,
                 chunks=chunks,

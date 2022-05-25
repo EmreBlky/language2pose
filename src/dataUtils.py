@@ -27,7 +27,7 @@ from common.quaternion import *
 _FLOAT_EPS = 1e-8
 
 class Data():
-  def __init__(self, path2data, dataset, lmksSubset, desc=None, split=(0.8,0.1), batch_size=100, time=100, chunks=1, offset=0, shuffle=True, mask=[1, 0, 1, 1, 1, 1, 1], feats_kind='quaternion', s2v=False, load_data=True, f_new=4):
+  def __init__(self, path2data, dataset, data_subset, lmksSubset, desc=None, split=(0.8,0.1), batch_size=100, time=100, chunks=1, offset=0, shuffle=True, mask=[1, 0, 1, 1, 1, 1, 1], feats_kind='quaternion', s2v=False, load_data=True, f_new=4):
     if feats_kind=='quaternion':
       assert len(mask) == 7, 'quaternions have 4 params for root joint'
     elif feats_kind=='euler':
@@ -35,7 +35,7 @@ class Data():
     elif feats_kind == 'rifke':
       assert len(mask) == 1, 'Rotation invariant Forward Kinematics have 3 parameters for root joint'
     
-    self.raw_data = eval(dataset)(path2data)
+    self.raw_data = eval(dataset)(path2data, data_subset)
     self.df = self.raw_data._get_df()
     self.s2v = s2v
     self.desc = desc

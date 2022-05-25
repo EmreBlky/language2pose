@@ -257,7 +257,7 @@ class RawData():
     return pos
 
 class KITMocap(RawData):
-  def __init__(self, path2data, preProcess_flag=False):
+  def __init__(self, path2data, data_subset, preProcess_flag=False):
     super(KITMocap, self).__init__()
     ## load skeleton
     self._SKELPATH = 'dataProcessing/KITMocap/skeleton.p'
@@ -273,12 +273,22 @@ class KITMocap(RawData):
     if preProcess_flag:
       self.preProcess(path2data)
 
+    ## get data_subset
+    if data_subset:
+      with open(data_subset, 'r') as f:
+        subset = f.readlines()
+        subset = [line.strip() for line in subset]
+      while (subset[-1] == ''):
+        subset = subset[:-1]
+
     ## Reading data
     data = []
     for tup in os.walk(path2data):
       for filename in tup[2]:
 #        if filename[:5] > '00200':
 #            continue
+        if data_subset and (filename[:5] not in subset):
+          continue
         if Path(filename).suffix == '.xml':
           annotpath = Path(tup[0])/(filename.split('_')[0] + '_annotations.json')
           annot = json.load(open(annotpath, 'r'))

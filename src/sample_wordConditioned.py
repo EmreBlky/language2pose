@@ -76,6 +76,7 @@ def sample(args, exp_num, data=None):
   path2data = args.path2data
   path2data = "/viscam/u/ying1123/dataset/kit-mocap/kit-mocap-lang2pose"
   dataset = args.dataset
+  data_subset = args.data_subset
   lmksSubset = args.lmksSubset
   desc = args.desc
   split = (args.train_frac, args.dev_frac)
@@ -97,7 +98,7 @@ def sample(args, exp_num, data=None):
 
   ## Load data iterables
   if data is None:
-    data = Data(path2data, dataset, lmksSubset, desc,
+    data = Data(path2data, dataset, data_subset, lmksSubset, desc,
                 split, batch_size=batch_size,
                 time=time,
                 chunks=chunks,
