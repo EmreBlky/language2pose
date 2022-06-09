@@ -23,11 +23,12 @@ def loop(args, exp_num):
   # assert args.load, 'Model name not provided'
   # assert os.path.isfile(args.load), 'Model file not found'
 
-  args_subset = ['exp', 'cpk', 'model', 'time', 'chunks']
-  book = BookKeeper(args, args_subset, args_dict_update={'feats_kind':args.feats_kind,
-                                                         'render_list':args.render_list})
-  args = book.args
+#  args_subset = ['exp', 'cpk', 'model', 'time', 'chunks']
+#  book = BookKeeper(args, args_subset, args_dict_update={'feats_kind':args.feats_kind,
+#                                                         'render_list':args.render_list})
+#  args = book.args
 
+  assert args.path2data, 'path to data not provided'
   if args.load:
     dir_name = book.name.dir(args.save_dir)
   else:
@@ -40,19 +41,21 @@ def loop(args, exp_num):
   else:
     render_list = None
 
-  dataset = args.dataset
-  feats_kind = args.feats_kind
-  if dataset == 'KITMocap':
-     path2data = args.path2data
-#    path2data = '../dataset/kit-mocap'
-  elif dataset == 'CMUMocap':
-    #path2data = '../dataset/cmu-pose/all_asfamc'
-    raise NotImplementedError
+#  dataset = args.dataset
+#  feats_kind = args.feats_kind
+#  if dataset == 'KITMocap':
+#     path2data = args.path2data
+##    path2data = '../dataset/kit-mocap'
+#  elif dataset == 'CMUMocap':
+#    #path2data = '../dataset/cmu-pose/all_asfamc'
+#    raise NotImplementedError
+  dataset = 'KITMocap'
+  feats_kind = 'fke'
 
   #data = Data(path2data, dataset, lmksSubset=['all'], desc=None, load_data=False)
 
   ## Load Skeleton
-  skel = pkl.load(open('dataProcessing/{}/skeleton.p'.format(args.dataset), 'rb'))
+  skel = pkl.load(open('dataProcessing/{}/skeleton.p'.format(dataset), 'rb'))
   filenames = []
   descriptions = []
   outputs = []
@@ -81,7 +84,7 @@ def loop(args, exp_num):
 
   print('{} files'.format(len(filenames)))
 
-  parallelRender(filenames, descriptions, outputs, skel, args.feats_kind)
+  parallelRender(filenames, descriptions, outputs, skel, feats_kind)
   
 if __name__ == '__main__':
   argparseNloop(loop)

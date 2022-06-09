@@ -257,7 +257,7 @@ class RawData():
     return pos
 
 class KITMocap(RawData):
-  def __init__(self, path2data, data_subset, preProcess_flag=False):
+  def __init__(self, path2data, data_subset=None, preProcess_flag=False):
     super(KITMocap, self).__init__()
     ## load skeleton
     self._SKELPATH = 'dataProcessing/KITMocap/skeleton.p'
@@ -846,7 +846,7 @@ if __name__ == '__main__':
   """PreProcessing"""
   import argparse
   parser = argparse.ArgumentParser()
-  parser.add_argument('-dataset', default='CMUMocap', type=str,
+  parser.add_argument('-dataset', default='KITMocap', type=str,
                       help='dataset kind')
   parser.add_argument('-path2data', default='../dataset/cmu-pose/all_asfamc/', type=str,
                       help='dataset kind')
