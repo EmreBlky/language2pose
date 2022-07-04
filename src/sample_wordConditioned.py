@@ -52,13 +52,13 @@ def toEuler(M, joints, euler_columns):
 def toFKE(M, data, filename):
   ''' Convert RIFKE to FKE '''
   print(filename.with_suffix('.rifke').as_posix())
-  output_columns = data.raw_data.output_columns('rifke')
+  output_columns = data.raw_data_train.output_columns('rifke')
   M[output_columns].to_csv(filename.with_suffix('.rifke').as_posix()) ## save rifke as well
-  M = data.raw_data.rifke2fke(M[output_columns].values)
+  M = data.raw_data_train.rifke2fke(M[output_columns].values)
 
   ''' Save FKE '''
   M = M.reshape(M.shape[0], -1)
-  output_columns = data.raw_data.output_columns('fke')
+  output_columns = data.raw_data_train.output_columns('fke')
   pd.DataFrame(data=M,
                columns=output_columns).to_csv(filename.as_posix())  
 
@@ -256,11 +256,12 @@ def sample(args, exp_num, data=None):
         #description = Data.tokenize(data.df[data.df[feats_kind] == loader.dataset.path2csv]['descriptions'].item())
 
         if dataset == 'KITMocap':
-          filename = Path(dir_name)/Path(desc)/Path(loader.dataset.path2csv).relative_to(path2data).with_suffix('.csv')
+#          filename = Path(dir_name)/Path(desc)/Path(loader.dataset.path2csv).relative_to(path2data).with_suffix('.csv')
+          filename = Path(dir_name)/Path(loader.dataset.path2csv).relative_to(path2data).with_suffix('.csv')
           #filename = Path(dir_name)/Path(desc)/Path(loader.dataset.path2csv).relative_to(path2data).with_name(Path(loader.dataset.path2csv).stem + '_{}'.format(description))
           os.makedirs(filename.parent, exist_ok=True)
           if feats_kind == 'quaternion':
-            data.raw_data.mat2csv(mat_full_temp.values, filename, columns)
+            data.raw_data_train.mat2csv(mat_full_temp.values, filename, columns)
           elif feats_kind == 'rifke':
             toFKE(mat_full_temp,
                   data,
@@ -271,11 +272,11 @@ def sample(args, exp_num, data=None):
           #filename = Path(dir_name)/Path(desc)/Path(loader.dataset.path2csv).relative_to(path2data).with_name(Path(loader.dataset.path2csv).stem + '_{}'.format(description))
           os.makedirs(filename.parent, exist_ok=True)
           if feats_kind in {'quaternion'}:
-            data.raw_data.mat2csv(mat_full_temp.values, filename, columns)
+            data.raw_data_train.mat2csv(mat_full_temp.values, filename, columns)
             mat_full = toEuler(M=mat_full_temp,
-                               joints=data.raw_data.joints,
-                               euler_columns=data.raw_data.columns)
-            data.raw_data.mat2amc(mat_full.values, filename.with_suffix('.amc'))
+                               joints=data.raw_data_train.joints,
+                               euler_columns=data.raw_data_train.columns)
+            data.raw_data_train.mat2amc(mat_full.values, filename.with_suffix('.amc'))
           elif feats_kind == 'rifke':
             print("toFKE", filename)
             toFKE(mat_full_temp,

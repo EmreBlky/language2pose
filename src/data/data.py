@@ -3,9 +3,13 @@ import os
 import numpy as np
 import pandas as pd
 from pathlib import Path
-from tqdm import tqdm
 import json
+from functools import partial, partialmethod                                                                                                                                               
+if os.environ.get("TQDM_DISABLE", "false").lower() in ["true", "1"]:
+  import tqdm
+  tqdm.tqdm.__init__ = partialmethod(tqdm.tqdm.__init__, disable=True)
 
+from tqdm import tqdm
 # import sys
 # sys.path.insert(0, './data')
 # sys.path.insert(0, './utils')

@@ -262,7 +262,7 @@ def train(args, exp_num, data=None):
   ## Sample
   print('Loading the best model and running the sample loop')
   args.__dict__.update({'load':book.name(book.weights_ext[0], book.weights_ext[1], args.save_dir)})
-  sample(args, exp_num, data)
+#  sample(args, exp_num, data)
 
   ## Render (on a cpu only node)
   # feats_kind_dict = {'rifke':'fke'}
