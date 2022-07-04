@@ -35,8 +35,14 @@ class Data():
     elif feats_kind == 'rifke':
       assert len(mask) == 1, 'Rotation invariant Forward Kinematics have 3 parameters for root joint'
     
-    self.raw_data = eval(dataset)(path2data, data_subset)
-    self.df = self.raw_data._get_df()
+#    self.raw_data = eval(dataset)(path2data, data_subset)
+    self.raw_data_train = eval(dataset)(os.path.join(path2data, 'train'), data_subset)
+    self.raw_data_dev = eval(dataset)(os.path.join(path2data, 'dev'), data_subset)
+    self.raw_data_test = eval(dataset)(os.path.join(path2data, 'test'), data_subset)
+#    self.df = self.raw_data._get_df()
+    self.df_train = self.raw_data_train._get_df()
+    self.df_dev = self.raw_data_dev._get_df()
+    self.df_test = self.raw_data_test._get_df()
     self.s2v = s2v
     self.desc = desc
     self.dataset = dataset
@@ -72,7 +78,7 @@ class Data():
     self.mask = mask
     self.feats_kind = feats_kind
 
-    f = self.raw_data._get_f()
+    f = self.raw_data_train._get_f() # TODO: hack
     if not f_new:
       f_new = f
     self.f_ratio = int(f/f_new)
@@ -95,15 +101,15 @@ class Data():
     self.test = DataLoader(ConcatDataset(self.datasets['test'].datasets), **self.dataLoader_kwargs)
 
   def tdt_split(self):
-    length = self.df.shape[0]
-    end_train = int(length*self.split[0])
-    start_dev = end_train
-    end_dev = int(start_dev + length*self.split[1])
-    start_test = end_dev
-
-    df_train = self.df[:end_train]
-    df_dev = self.df[start_dev:end_dev]
-    df_test = self.df[start_test:]
+#    length = self.df.shape[0]
+#    end_train = int(length*self.split[0])
+#    start_dev = end_train
+#    end_dev = int(start_dev + length*self.split[1])
+#    start_test = end_dev
+#
+#    df_train = self.df[:end_train]
+#    df_dev = self.df[start_dev:end_dev]
+#    df_test = self.df[start_test:]
 
     minidataKwargs = {'lmksSubset':self.lmksSubset,
                       'time':self.time,
@@ -117,33 +123,33 @@ class Data():
     if self.desc:
       dataset_train = ConcatDataset([MiniData(row[self.feats_kind],
                                               sentence_vector=self.file2vec(desc=row['class']),
-                                              **minidataKwargs) for i, row in tqdm(df_train.iterrows())])
+                                              **minidataKwargs) for i, row in tqdm(self.df_train.iterrows())])
       dataset_dev = ConcatDataset([MiniData(row[self.feats_kind],
                                             sentence_vector=self.file2vec(desc=row['class']),
-                                            **minidataKwargs) for i, row in tqdm(df_dev.iterrows())])
+                                            **minidataKwargs) for i, row in tqdm(self.df_dev.iterrows())])
       dataset_test = ConcatDataset([MiniData(row[self.feats_kind],
                                              sentence_vector=self.file2vec(desc=row['class']),
-                                             **minidataKwargs) for i, row in tqdm(df_test.iterrows())])
+                                             **minidataKwargs) for i, row in tqdm(self.df_test.iterrows())])
     elif self.s2v:
       dataset_train = ConcatDataset([MiniData(row[self.feats_kind],
                                               sentence_vector=row['descriptions'],
-                                              **minidataKwargs) for i, row in tqdm(df_train.iterrows()) if row['descriptions']])
+                                              **minidataKwargs) for i, row in tqdm(self.df_train.iterrows()) if row['descriptions']])
       dataset_dev = ConcatDataset([MiniData(row[self.feats_kind],
                                             sentence_vector=row['descriptions'],
-                                            **minidataKwargs) for i, row in tqdm(df_dev.iterrows()) if row['descriptions']])
+                                            **minidataKwargs) for i, row in tqdm(self.df_dev.iterrows()) if row['descriptions']])
       dataset_test = ConcatDataset([MiniData(row[self.feats_kind],
                                              sentence_vector=row['descriptions'],
-                                             **minidataKwargs) for i, row in tqdm(df_test.iterrows()) if row['descriptions']])
+                                             **minidataKwargs) for i, row in tqdm(self.df_test.iterrows()) if row['descriptions']])
     else:
       dataset_train = ConcatDataset([MiniData(row[self.feats_kind],
                                               sentence_vector=row['descriptions'],
-                                              **minidataKwargs) for i, row in tqdm(df_train.iterrows())])
+                                              **minidataKwargs) for i, row in tqdm(self.df_train.iterrows())])
       dataset_dev = ConcatDataset([MiniData(row[self.feats_kind],
                                             sentence_vector=row['descriptions'],
-                                            **minidataKwargs) for i, row in tqdm(df_dev.iterrows())])
+                                            **minidataKwargs) for i, row in tqdm(self.df_dev.iterrows())])
       dataset_test = ConcatDataset([MiniData(row[self.feats_kind],
                                              sentence_vector=row['descriptions'],
-                                             **minidataKwargs) for i, row in tqdm(df_test.iterrows())])
+                                             **minidataKwargs) for i, row in tqdm(self.df_test.iterrows())])
       
     return {'train':dataset_train,
             'dev':dataset_dev,
