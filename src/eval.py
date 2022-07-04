@@ -48,7 +48,11 @@ def main():
         ape[dataset] /= count
         print(f'ape[{desc}]: {ape[dataset]}')
 
-#    print(ape)
+
+    ## write to file
+    filename = os.path.join(gen_dir, 'ape.csv')
+    with open(filename, 'w') as f:
+        pd.DataFrame(data=ape, index=['train', 'dev', 'test'], columns=joints).to_csv(f)
 
 if __name__ == '__main__':
     main()
