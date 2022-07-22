@@ -37,8 +37,8 @@ class Data():
     
 #    self.raw_data = eval(dataset)(path2data, data_subset)
     self.raw_data_train = eval(dataset)(os.path.join(path2data, 'train'), data_subset)
-    self.raw_data_dev = eval(dataset)(os.path.join(path2data, 'dev'), data_subset)
-    self.raw_data_test = eval(dataset)(os.path.join(path2data, 'test'), data_subset)
+    self.raw_data_dev = eval(dataset)(os.path.join(path2data, 'dev'), None)
+    self.raw_data_test = eval(dataset)(os.path.join(path2data, 'test'), None)
 #    self.df = self.raw_data._get_df()
     self.df_train = self.raw_data_train._get_df()
     self.df_dev = self.raw_data_dev._get_df()

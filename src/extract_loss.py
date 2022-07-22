@@ -11,9 +11,10 @@ dic = {259: 'slurm-3837685.out',
        261: 'slurm-3837702.out',
        262: 'slurm-3837705.out',
        263: 'slurm-3837707.out',
-       42: 'slurm-3840800.out'}
+       42: 'slurm-3840800.out',
+       46: 'slurm-3846541.out'}
 
-model_id = 260
+model_id = 46
 if len(sys.argv) > 1:
     model_id = int(sys.argv[1])
 log_file = dic[model_id]

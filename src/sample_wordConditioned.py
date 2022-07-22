@@ -67,7 +67,7 @@ def sample(args, exp_num, data=None):
   assert os.path.isfile(args.load), 'Model file not found'
 
   args_subset = ['exp', 'cpk', 'model', 'time', 'chunks']
-  book = BookKeeper(args, args_subset, args_dict_update={})
+  book = BookKeeper(args, args_subset, args_dict_update={'load_checkpoint':args.load_checkpoint})
   args = book.args
 
   dir_name = book.name.dir(args.save_dir)
